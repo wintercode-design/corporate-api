@@ -1,0 +1,218 @@
+// Prisma schema file for Wintercode API
+// Define datasource and generator
+
+datasource db {
+  provider = "mysql" // Change to your DB if needed
+  url      = env("MAIN_DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Models will be added below 
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+  PENDING
+  RESOLVED
+  REJECTED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum Category {
+  GENERAL
+  TECH
+  BUSINESS
+  DESIGN
+  OTHER
+}
+
+model Product {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+  price       Float
+  stock       Int
+  category    String
+  imageUrl    String
+  status      Status
+}
+
+model Ads {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  imageUrl    String
+  linkUrl     String
+  position    String
+  type        String
+  status      Status
+  startDate   DateTime
+  endDate     DateTime
+  priority    Int
+  createdAt   DateTime @default(now())
+  clicks      Int      @default(0)
+  impressions Int      @default(0)
+}
+
+model Blog {
+  id            Int      @id @default(autoincrement())
+  title         String
+  imageUrl      String?
+  author        String
+  category      String
+  status        Status
+  publishedDate DateTime
+  tags          String // Comma-separated tags, e.g. "tag1,tag2,tag3"
+  content       String
+}
+
+model Contact {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String
+  subject   String
+  message   String
+  status    Status
+  priority  Priority
+  createdAt DateTime @default(now())
+  replied   Boolean  @default(false)
+}
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  name        String
+  date        DateTime
+  time        String
+  category    String
+  location    String
+  description String
+  imageUrl    String
+}
+
+model Faq {
+  id        Int      @id @default(autoincrement())
+  question  String
+  answer    String
+  category  String
+  status    Status
+  order     Int
+  createdAt DateTime @default(now())
+}
+
+model Subscriber {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  name         String
+  subscribedAt DateTime @default(now())
+  status       Status
+  source       String
+}
+
+model Offer {
+  id                 Int      @id @default(autoincrement())
+  title              String
+  imageUrl           String?
+  description        String
+  originalPrice      Float
+  discountedPrice    Float
+  discountPercentage Float
+  validUntil         DateTime
+  status             Status
+  category           String
+  createdAt          DateTime @default(now())
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  title       String
+  imageUrl    String?
+  category    String
+  status      Status
+  startDate   DateTime
+  endDate     DateTime
+  description String
+}
+
+model Review {
+  id            Int      @id @default(autoincrement())
+  clientName    String
+  clientTitle   String
+  clientCompany String
+  rating        Int
+  review        String
+  projectType   String
+  status        Status
+  featured      Boolean  @default(false)
+  clientImage   String
+  createdAt     DateTime @default(now())
+}
+
+model TeamMember {
+  id             Int             @id @default(autoincrement())
+  name           String
+  role           String
+  avatarUrl      String
+  status         Status
+  email          String          @unique
+  linkedin       String
+  github         String
+  website        String
+  bio            String
+  resumeUrl      String
+  certifications Certification[]
+  achievements   String // Comma-separated achievements
+  skills         String // Comma-separated skills
+}
+
+model Certification {
+  id           Int        @id @default(autoincrement())
+  url          String
+  year         String
+  name         String
+  issuer       String
+  teamMemberId Int
+  teamMember   TeamMember @relation(fields: [teamMemberId], references: [id])
+}
+
+model User {
+  id          Int          @id @default(autoincrement())
+  email       String       @unique
+  avatarUrl   String?
+  password    String
+  name        String
+  status      Status       @default(ACTIVE)
+  roleId      Int
+  role        Role         @relation(fields: [roleId], references: [id])
+  permissions Permission[] @relation("UserPermissions")
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Role {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  description String?
+  users       User[]
+  permissions Permission[] @relation("RolePermissions")
+}
+
+model Permission {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+  roles       Role[]  @relation("RolePermissions")
+  users       User[]  @relation("UserPermissions")
+}

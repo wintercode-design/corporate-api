@@ -1,0 +1,548 @@
+@host = http://localhost:4000
+
+### ========================================
+### SETUP: Create Roles and Permissions First
+### ========================================
+
+### ROLES - Create First
+POST {{host}}/api/roles
+Content-Type: application/json
+
+{
+  "name": "Admin",
+  "description": "Administrator role with full access"
+}
+
+###
+POST {{host}}/api/roles
+Content-Type: application/json
+
+{
+  "name": "User",
+  "description": "Regular user role"
+}
+
+###
+POST {{host}}/api/roles
+Content-Type: application/json
+
+{
+  "name": "Moderator",
+  "description": "Moderator role with limited admin access"
+}
+
+### PERMISSIONS - Create Second
+POST {{host}}/api/permissions
+Content-Type: application/json
+
+{
+  "name": "read:all",
+  "description": "Read all resources"
+}
+
+###
+POST {{host}}/api/permissions
+Content-Type: application/json
+
+{
+  "name": "write:all",
+  "description": "Write all resources"
+}
+
+###
+POST {{host}}/api/permissions
+Content-Type: application/json
+
+{
+  "name": "delete:all",
+  "description": "Delete all resources"
+}
+
+###
+POST {{host}}/api/permissions
+Content-Type: application/json
+
+{
+  "name": "read:own",
+  "description": "Read own resources only"
+}
+
+### ========================================
+### AUTHENTICATION: Create Users After Roles
+### ========================================
+
+### AUTH - Register (requires roleId)
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "Admin123!",
+  "name": "Admin User",
+  "roleId": 1
+}
+
+###
+POST {{host}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "user1@example.com",
+  "password": "Password123!",
+  "name": "User One",
+  "roleId": 2
+}
+
+###
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "Admin123!"
+}
+
+###
+POST {{host}}/api/auth/password-reset
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "resetUrl": "https://example.com/reset?token=abc123"
+}
+
+###
+GET {{host}}/api/auth/me/1
+
+### USERS - Create After Roles
+POST {{host}}/api/users
+Content-Type: application/json
+
+{
+  "email": "user2@example.com",
+  "password": "Password456!",
+  "name": "User Two",
+  "roleId": 2,
+  "status": "ACTIVE"
+}
+
+###
+GET {{host}}/api/users
+
+###
+GET {{host}}/api/users/1
+
+###
+PUT {{host}}/api/users/1
+Content-Type: application/json
+
+{
+  "name": "User Two Updated"
+}
+
+###
+DELETE {{host}}/api/users/4
+
+### ========================================
+### CORE ENTITIES: Create After Users
+### ========================================
+
+### PRODUCTS
+POST {{host}}/api/products
+Content-Type: application/json
+
+{
+  "name": "Sample Product",
+  "description": "A great product.",
+  "price": 19.99,
+  "stock": 100,
+  "category": "GENERAL",
+  "imageUrl": "https://example.com/image.png",
+  "status": "ACTIVE"
+}
+
+###
+GET {{host}}/api/products
+
+###
+GET {{host}}/api/products/1
+
+###
+PUT {{host}}/api/products/1
+Content-Type: application/json
+
+{
+  "name": "Updated Product",
+  "price": 24.99
+}
+
+###
+DELETE {{host}}/api/products/1
+
+### TEAM MEMBERS
+POST {{host}}/api/team-members
+Content-Type: application/json
+
+{
+  "name": "Jane Doe",
+  "role": "Developer",
+  "avatarUrl": "https://example.com/avatar.png",
+  "status": "ACTIVE",
+  "email": "jane@example.com",
+  "linkedin": "https://linkedin.com/in/janedoe",
+  "github": "https://github.com/janedoe",
+  "website": "https://janedoe.com",
+  "bio": "Full stack developer.",
+  "resumeUrl": "https://example.com/resume.pdf",
+  "achievements": "Award1,Award2",
+  "skills": "JS,TS,Node"
+}
+
+###
+GET {{host}}/api/team-members
+
+###
+GET {{host}}/api/team-members/1
+
+###
+PUT {{host}}/api/team-members/1
+Content-Type: application/json
+
+{
+  "bio": "Senior full stack developer."
+}
+
+###
+DELETE {{host}}/api/team-members/1
+
+### PROJECTS
+POST {{host}}/api/projects
+Content-Type: application/json
+
+{
+  "title": "Project X",
+  "category": "TECH",
+  "status": "ACTIVE",
+  "startDate": "2024-01-01T00:00:00.000Z",
+  "endDate": "2024-12-31T00:00:00.000Z",
+  "description": "A tech project."
+}
+
+###
+GET {{host}}/api/projects
+
+###
+GET {{host}}/api/projects/1
+
+###
+PUT {{host}}/api/projects/1
+Content-Type: application/json
+
+{
+  "description": "A major tech project."
+}
+
+###
+DELETE {{host}}/api/projects/1
+
+### ========================================
+### CONTENT ENTITIES: Create After Core
+### ========================================
+
+### BLOGS
+POST {{host}}/api/blogs
+Content-Type: application/json
+
+{
+  "title": "First Blog Post",
+  "author": "Author Name",
+  "category": "TECH",
+  "status": "PUBLISHED",
+  "publishedDate": "2024-05-01T00:00:00.000Z",
+  "tags": "api,rest,typescript",
+  "content": "This is the content of the blog post."
+}
+
+###
+GET {{host}}/api/blogs
+
+###
+GET {{host}}/api/blogs/1
+
+###
+PUT {{host}}/api/blogs/1
+Content-Type: application/json
+
+{
+  "content": "Updated blog content."
+}
+
+###
+DELETE {{host}}/api/blogs/1
+
+### REVIEWS
+POST {{host}}/api/reviews
+Content-Type: application/json
+
+{
+  "clientName": "Client A",
+  "clientTitle": "CEO",
+  "clientCompany": "Company A",
+  "rating": 5,
+  "review": "Excellent work!",
+  "projectType": "Web",
+  "status": "ACTIVE",
+  "featured": true,
+  "clientImage": "https://example.com/client.png"
+}
+
+###
+GET {{host}}/api/reviews
+
+###
+GET {{host}}/api/reviews/1
+
+###
+PUT {{host}}/api/reviews/1
+Content-Type: application/json
+
+{
+  "review": "Outstanding work!"
+}
+
+###
+DELETE {{host}}/api/reviews/1
+
+### EVENTS
+POST {{host}}/api/events
+Content-Type: application/json
+
+{
+  "name": "Launch Event",
+  "date": "2024-06-01T10:00:00.000Z",
+  "time": "10:00",
+  "category": "BUSINESS",
+  "location": "HQ",
+  "description": "Product launch event.",
+  "imageUrl": "https://example.com/event.png"
+}
+
+###
+GET {{host}}/api/events
+
+###
+GET {{host}}/api/events/1
+
+###
+PUT {{host}}/api/events/1
+Content-Type: application/json
+
+{
+  "description": "Updated event description."
+}
+
+###
+DELETE {{host}}/api/events/1
+
+### ========================================
+### BUSINESS ENTITIES: Create After Content
+### ========================================
+
+### OFFERS
+POST {{host}}/api/offers
+Content-Type: application/json
+
+{
+  "title": "Special Offer",
+  "description": "Discounted product.",
+  "originalPrice": 100.0,
+  "discountedPrice": 80.0,
+  "discountPercentage": 20.0,
+  "validUntil": "2024-12-31T00:00:00.000Z",
+  "status": "ACTIVE",
+  "category": "GENERAL"
+}
+
+###
+GET {{host}}/api/offers
+
+###
+GET {{host}}/api/offers/1
+
+###
+PUT {{host}}/api/offers/1
+Content-Type: application/json
+
+{
+  "description": "Super discounted product."
+}
+
+###
+DELETE {{host}}/api/offers/1
+
+### ADS
+POST {{host}}/api/ads
+Content-Type: application/json
+
+{
+  "title": "Homepage Banner",
+  "description": "Main banner ad.",
+  "imageUrl": "https://example.com/banner.png",
+  "linkUrl": "https://example.com",
+  "position": "top",
+  "type": "banner",
+  "status": "ACTIVE",
+  "startDate": "2024-05-01T00:00:00.000Z",
+  "endDate": "2024-06-01T00:00:00.000Z",
+  "priority": 1
+}
+
+###
+GET {{host}}/api/ads
+
+###
+GET {{host}}/api/ads/1
+
+###
+PUT {{host}}/api/ads/1
+Content-Type: application/json
+
+{
+  "description": "Updated banner ad description."
+}
+
+###
+DELETE {{host}}/api/ads/1
+
+### ========================================
+### SUPPORT ENTITIES: Create Last
+### ========================================
+
+### FAQS
+POST {{host}}/api/faqs
+Content-Type: application/json
+
+{
+  "question": "How to use the API?",
+  "answer": "Just send HTTP requests!",
+  "category": "GENERAL",
+  "status": "ACTIVE",
+  "order": 1
+}
+
+###
+GET {{host}}/api/faqs
+
+###
+GET {{host}}/api/faqs/1
+
+###
+PUT {{host}}/api/faqs/1
+Content-Type: application/json
+
+{
+  "answer": "Send HTTP requests to the endpoints."
+}
+
+###
+DELETE {{host}}/api/faqs/1
+
+### SUBSCRIBERS
+POST {{host}}/api/subscribers
+Content-Type: application/json
+
+{
+  "email": "subscriber@example.com",
+  "name": "Subscriber Name",
+  "status": "ACTIVE",
+  "source": "newsletter"
+}
+
+###
+GET {{host}}/api/subscribers
+
+###
+GET {{host}}/api/subscribers/1
+
+###
+PUT {{host}}/api/subscribers/1
+Content-Type: application/json
+
+{
+  "name": "Updated Subscriber"
+}
+
+###
+DELETE {{host}}/api/subscribers/1
+
+### CONTACTS
+POST {{host}}/api/contacts
+Content-Type: application/json
+
+{
+  "name": "Contact Name",
+  "email": "contact@example.com",
+  "phone": "1234567890",
+  "subject": "Inquiry",
+  "message": "I have a question.",
+  "status": "ACTIVE",
+  "priority": "MEDIUM"
+}
+
+###
+GET {{host}}/api/contacts
+
+###
+GET {{host}}/api/contacts/1
+
+###
+PUT {{host}}/api/contacts/1
+Content-Type: application/json
+
+{
+  "message": "Updated message."
+}
+
+###
+DELETE {{host}}/api/contacts/1
+
+### ========================================
+### CLEANUP: Delete in Reverse Order
+### ========================================
+
+### Delete all entities in reverse dependency order
+DELETE {{host}}/api/contacts/1
+###
+DELETE {{host}}/api/subscribers/1
+###
+DELETE {{host}}/api/faqs/1
+###
+DELETE {{host}}/api/ads/1
+###
+DELETE {{host}}/api/offers/1
+###
+DELETE {{host}}/api/events/1
+###
+DELETE {{host}}/api/reviews/1
+###
+DELETE {{host}}/api/blogs/1
+###
+DELETE {{host}}/api/projects/1
+###
+DELETE {{host}}/api/team-members/1
+###
+DELETE {{host}}/api/products/1
+###
+DELETE {{host}}/api/users/1
+###
+DELETE {{host}}/api/permissions/3
+###
+DELETE {{host}}/api/permissions/2
+###
+DELETE {{host}}/api/permissions/1
+###
+DELETE {{host}}/api/roles/3
+###
+DELETE {{host}}/api/roles/2
+###
+DELETE {{host}}/api/roles/1 
