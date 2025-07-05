@@ -1,2 +1,4 @@
 node_modules
 .env
+testfile.rest
+test_rbac.rest
