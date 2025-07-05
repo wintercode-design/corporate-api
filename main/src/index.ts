@@ -34,7 +34,11 @@ class App {
   }
 
   private setMiddleware() {
-    this.app.use(cors());
+    this.app.use(
+      cors({
+        origin: "*",
+      })
+    );
     this.app.use(morgan("dev"));
     this.app.use(bodyParser.json());
     this.app.use(cookieParser());
