@@ -24,6 +24,7 @@ import UserRouter from "./routes/user";
 import RoleRouter from "./routes/role";
 import PermissionRouter from "./routes/permission";
 import AdminRouter from "./routes/admin";
+import QuoteRouter from "./routes/quote";
 
 class App {
   public app: Application;
@@ -64,6 +65,7 @@ class App {
     this.app.use("/api/roles", new RoleRouter().routes);
     this.app.use("/api/permissions", new PermissionRouter().routes);
     this.app.use("/api/admin", new AdminRouter().routes);
+    this.app.use("/api/quotes", new QuoteRouter().routes);
   }
 
   public listen(port: number) {
