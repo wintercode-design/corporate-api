@@ -1,14 +1,24 @@
 import { PrismaClient, Event } from "@prisma/client";
 import deleteImage from "../utils/deleteImage";
+import slugify from "slugify";
 const prisma = new PrismaClient();
 
 export class EventLogic {
   async createEvent(data: Omit<Event, "id">): Promise<Event> {
-    return prisma.event.create({ data });
+    return prisma.event.create({
+      data: {
+        ...data,
+        slug: slugify(data.name),
+      },
+    });
   }
 
   async getEventById(id: number): Promise<Event | null> {
     return prisma.event.findUnique({ where: { id } });
+  }
+
+  async getEventBySlug(slug: string): Promise<Event | null> {
+    return prisma.event.findFirst({ where: { slug } });
   }
 
   async getAllEvents(): Promise<Event[]> {

@@ -12,7 +12,8 @@ export default class BlogRouter {
 
   registerRoutes() {
     this.routes.get("/", this.blogController.getBlogs);
-    this.routes.get("/:id", this.blogController.getOneBlog);
+    this.routes.get("/id/:id", this.blogController.getOneBlog);
+    this.routes.get("/slug/:slug", this.blogController.getOneBlogSlug);
     this.routes.post(
       "/",
       upload.single("imageUrl"),

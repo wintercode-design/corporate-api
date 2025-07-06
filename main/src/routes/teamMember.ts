@@ -12,7 +12,11 @@ export default class TeamMemberRouter {
 
   registerRoutes() {
     this.routes.get("/", this.teamMemberController.getTeamMembers);
-    this.routes.get("/:id", this.teamMemberController.getOneTeamMember);
+    this.routes.get("/id/:id", this.teamMemberController.getOneTeamMember);
+    this.routes.get(
+      "/slug/:slug",
+      this.teamMemberController.getOneTeamMemberSlug
+    );
     this.routes.post(
       "/",
       upload.single("avatarUrl"),

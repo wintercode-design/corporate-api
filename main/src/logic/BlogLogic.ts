@@ -1,14 +1,24 @@
 import { PrismaClient, Blog } from "@prisma/client";
 import deleteImage from "../utils/deleteImage";
+import slugify from "slugify";
 const prisma = new PrismaClient();
 
 export class BlogLogic {
   async createBlog(data: Omit<Blog, "id">): Promise<Blog> {
-    return prisma.blog.create({ data });
+    return prisma.blog.create({
+      data: {
+        ...data,
+        slug: slugify(data.title),
+      },
+    });
   }
 
   async getBlogById(id: number): Promise<Blog | null> {
     return prisma.blog.findUnique({ where: { id } });
+  }
+
+  async getBlogBySlug(slug: string): Promise<Blog | null> {
+    return prisma.blog.findFirst({ where: { slug } });
   }
 
   async getAllBlogs(): Promise<Blog[]> {

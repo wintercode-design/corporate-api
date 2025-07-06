@@ -12,7 +12,8 @@ export default class EventRouter {
 
   registerRoutes() {
     this.routes.get("/", this.eventController.getEvents);
-    this.routes.get("/:id", this.eventController.getOneEvent);
+    this.routes.get("/id/:id", this.eventController.getOneEvent);
+    this.routes.get("/slug/:slug", this.eventController.getOneEventSlug);
     this.routes.post(
       "/",
       upload.single("imageUrl"),

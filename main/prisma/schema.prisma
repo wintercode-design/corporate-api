@@ -21,6 +21,9 @@ enum Status {
   PENDING
   RESOLVED
   REJECTED
+  INPROGRESS
+  COMPLETED
+  HALTED
 }
 
 enum Priority {
@@ -69,6 +72,7 @@ model Ads {
 model Blog {
   id            Int      @id @default(autoincrement())
   title         String
+  slug          String   @default("none")
   imageUrl      String?
   author        String
   category      String
@@ -94,6 +98,7 @@ model Contact {
 model Event {
   id          Int      @id @default(autoincrement())
   name        String
+  slug        String   @default("none")
   date        DateTime
   time        String
   category    String
@@ -138,6 +143,7 @@ model Offer {
 model Project {
   id          Int      @id @default(autoincrement())
   title       String
+  slug        String   @default("none")
   imageUrl    String?
   category    String
   status      Status
@@ -163,6 +169,7 @@ model Review {
 model TeamMember {
   id             Int             @id @default(autoincrement())
   name           String
+  slug           String          @default("none")
   role           String
   avatarUrl      String
   status         Status

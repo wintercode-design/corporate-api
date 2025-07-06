@@ -3,7 +3,13 @@ const prisma = new PrismaClient();
 
 export class FaqLogic {
   async createFaq(data: Omit<Faq, "id">): Promise<Faq> {
-    return prisma.faq.create({ data });
+    const { createdAt, ...faqData } = data;
+    return prisma.faq.create({
+      data: {
+        ...faqData,
+        createdAt: new Date(createdAt).toISOString(),
+      },
+    });
   }
 
   async getFaqById(id: number): Promise<Faq | null> {

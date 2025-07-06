@@ -12,7 +12,8 @@ export default class ProjectRouter {
 
   registerRoutes() {
     this.routes.get("/", this.projectController.getProjects);
-    this.routes.get("/:id", this.projectController.getOneProject);
+    this.routes.get("/id/:id", this.projectController.getOneProject);
+    this.routes.get("/slug/:slug", this.projectController.getOneProjectSlug);
     this.routes.post(
       "/",
       upload.single("imageUrl"),

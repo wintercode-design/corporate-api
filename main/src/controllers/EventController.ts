@@ -30,11 +30,15 @@ const paramSchema = Joi.object({
   id: Joi.string().pattern(/^\d+$/).required(),
 });
 
+const slugSchema = Joi.object({
+  slug: Joi.string().required(),
+});
+
 class EventController {
   validate = (
     request: Request<{ id?: string }>,
     response: Response,
-    schema: "create" | "update" | "paramId"
+    schema: "create" | "update" | "paramId" | "slug"
   ) => {
     let result: Joi.ValidationResult | null = null;
     switch (schema) {
@@ -52,6 +56,12 @@ class EventController {
         break;
       case "paramId":
         result = paramSchema.validate(request.params);
+        if (result.error) {
+          response.status(400).json({ error: result.error.details[0].message });
+        }
+        break;
+      case "slug":
+        result = slugSchema.validate(request.params);
         if (result.error) {
           response.status(400).json({ error: result.error.details[0].message });
         }
@@ -109,6 +119,17 @@ class EventController {
     try {
       const id = Number(request.params.id);
       const event = await eventLogic.getEventById(id);
+      response.status(200).json(event);
+    } catch (err) {
+      throw new CustomError("Failed to fetch event", undefined, err as Error);
+    }
+  };
+
+  getOneEventSlug = async (request: Request, response: Response) => {
+    if (!this.validate(request, response, "slug")) return;
+    try {
+      const slug = request.params.slug;
+      const event = await eventLogic.getEventBySlug(slug);
       response.status(200).json(event);
     } catch (err) {
       throw new CustomError("Failed to fetch event", undefined, err as Error);
