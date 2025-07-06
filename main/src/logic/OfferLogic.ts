@@ -4,11 +4,10 @@ const prisma = new PrismaClient();
 
 export class OfferLogic {
   async createOffer(data: Omit<Offer, "id">): Promise<Offer> {
-    const { createdAt, ...offerData } = data;
     return prisma.offer.create({
       data: {
-        ...offerData,
-        createdAt: new Date().toISOString(),
+        ...data,
+        createdAt: new Date("crea").toISOString(),
       },
     });
   }

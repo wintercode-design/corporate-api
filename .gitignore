@@ -2,3 +2,5 @@ node_modules
 .env
 testfile.rest
 test_rbac.rest
+test_auth_routes.rest
+dist

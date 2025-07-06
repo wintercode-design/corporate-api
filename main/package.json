@@ -4,7 +4,7 @@
   "description": "Wintercode home website api",
   "main": "index.js",
   "scripts": {
-    "build": "tsc --build && npm run ejs:cp",
+    "build": "tsc --build",
     "ejs:cp": "cd ./scripts/ && copyTemplates.sh",
     "start": "node ./build/index.js",
     "dev": "nodemon ./src/index.ts",
