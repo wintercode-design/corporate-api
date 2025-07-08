@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-wintercode
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-wintercode
+  template:
+    metadata:
+      labels:
+        app: mongo-wintercode
+    spec:
+      containers:
+      - name: mongo
+        image: mongo:6
+        ports:
+          - containerPort: 27017
+        env:
+          - name: MONGO_INITDB_DATABASE
+            value: "wintercode-db"
+        volumeMounts:
+          - name: mongo-storage
+            mountPath: /data/db
+      volumes:
+        - name: mongo-storage
+          emptyDir: {}  # Or use PVC if persistent
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-wintercode
+spec:
+  selector:
+    app: mongo-wintercode
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+  clusterIP: None  # Or use type: ClusterIP if needed

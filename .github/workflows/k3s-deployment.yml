@@ -3,7 +3,10 @@ name: CI/CD to K8s
 on:
   push:
     branches:
-    - main
+      - main
+
+env:
+  IMAGE_NAME: wintercodenkjj/wintercode-api
 
 jobs:
   lint:
@@ -27,19 +30,20 @@ jobs:
       - name: Install deps
         run: npm ci
         working-directory: ./main
-    
+
       - name: Build project
         run: npm run build
         working-directory: ./main
+
       - name: Log in to GIT HUB CONTAINER REGISTERY
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
-    
+        run: echo "${{ secrets.DOCKER_PASSWORD  }}" | docker login -u ${{ env.DOCKER_USERNAME  }} --password-stdin
+
       - name: Build Docker image
-        run: docker build -t wintercodenkjj/wintercode-api:latest .
-    
+        run: docker build -t $IMAGE_NAME:latest .
+
       - name: Push Docker image
-        run: docker push wintercodenkjj/wintercode-api:latest
-  
+        run: docker push $IMAGE_NAME:latest
+
   deploy:
     name: Deply on cluster
     runs-on: ubuntu-latest
@@ -51,7 +55,7 @@ jobs:
           mkdir -p ~/.kube
           echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
           chmod 600 ~/.kube/config
-      
+
       - name: Redeploy app
         run: |
           kubectl set image deployment/loumo-api loumo-api=jordanloumo/loumo-api:latest

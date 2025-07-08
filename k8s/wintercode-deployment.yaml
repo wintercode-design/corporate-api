@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wintercode
+  labels:
+    app: wintercode
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wintercode
+  template:
+    metadata:
+      labels:
+        app: wintercode
+    spec:
+      containers:
+      - name: wintercode
+        image: wintercodenkjj/wintercode:latest
+        ports:
+          - containerPort: 5000
+        env:
+          - name: NODE_ENV
+            value: "dev"
+          - name: PORT
+            value: "5000"
+          - name: BASE_URL
+            value: "http://localhost"
+          - name: FRONTEND_URL
+            value: "http://localhost:3000"
+          - name: PAWAPAY_BASE_URL
+            value: "https://api.sandbox.pawapay.io"
+          - name: PAWAPAY_API_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: wintercode-secrets
+                key: PAWAPAY_API_TOKEN
+          - name: MAIN_DATABASE_URL
+            value: "mysql://root:Derliche@localhost:3306/wintercode"
+          - name: LOG_DATABASE_URL
+            value: "mongodb://mongo_wintercode:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.5.2"
+          - name: JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: wintercode-secrets
+                key: JWT_SECRET
+          - name: SMTP_USER
+            value: "info@le-carino.com"
+          - name: SMTP_PASS
+            valueFrom:
+              secretKeyRef:
+                name: wintercode-secrets
+                key: SMTP_PASS
+          - name: MYSQLDB
+            value: "mysql://root:krest@mysql:3306/wintercode"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wintercode-service
+spec:
+  selector:
+    app: wintercode
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: LoadBalancer  # Or NodePort if you prefer
