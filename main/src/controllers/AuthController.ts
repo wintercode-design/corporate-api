@@ -14,7 +14,7 @@ const registerSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
   name: Joi.string().required(),
-  roleId: Joi.number().required(),
+  // roleId: Joi.number().required(),
 });
 
 const passwordResetSchema = Joi.object({

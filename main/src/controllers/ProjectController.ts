@@ -19,7 +19,7 @@ const createProjectSchema = Joi.object({
       "PENDING",
       "RESOLVED",
       "REJECTED",
-      "IN_PROGRESS",
+      "INPROGRESS",
       "COMPLETED",
       "HALTED"
     )
@@ -42,7 +42,7 @@ const updateProjectSchema = Joi.object({
       "PENDING",
       "RESOLVED",
       "REJECTED",
-      "IN_PROGRESS",
+      "INPROGRESS",
       "COMPLETED",
       "HALTED"
     )

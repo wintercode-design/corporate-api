@@ -22,7 +22,7 @@ export default class AuthLogic {
   }
 
   async registerUser(
-    userData: Omit<User, "id" | "createdAt" | "updatedAt"> & {
+    userData: Omit<User, "id" | "createdAt" | "updatedAt" | "roleId"> & {
       password: string;
     }
   ) {
@@ -34,6 +34,7 @@ export default class AuthLogic {
     const user = await prisma.user.create({
       data: {
         ...userData,
+        roleId: 2,
         password: hashedPassword,
         status: Status.ACTIVE,
       },
