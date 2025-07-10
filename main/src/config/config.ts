@@ -7,7 +7,7 @@ const env = process.env;
 const config = {
   APP_NAME: env["APP_NAME"] ?? "LOUMO",
   NODE_ENV: env["NODE_ENV"] ?? "dev",
-  PORT: env["PORT"] ?? 5000, // set
+  PORT: env["PORT"] ?? "4000", // set
   BASE_URL: env["BASE_URL"] ?? "", //
   FRONTEND_URL: env["FRONTEND_URL"] ?? "",
   PAWAPAY: {
@@ -27,7 +27,7 @@ const config = {
   JWT: {
     EXPIRATION: Math.floor(Date.now() / 1000) + 60 * 60, //1h
     COOKIE_EXPIRATION: 360,
-    SECRET: process.env["JWT_SECRET"] ?? "your_jwt_secret",
+    SECRET: env["JWT_SECRET"] ?? "your_jwt_secret",
   },
   EMAIL: {
     SMTP_USER: env["SMTP_USER"] ?? "",

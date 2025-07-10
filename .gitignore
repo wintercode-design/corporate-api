@@ -1,6 +1,18 @@
-node_modules
-.env
+node_modules/
+.env*
 testfile.rest
 test_rbac.rest
 test_auth_routes.rest
-dist
+dist/
+
+# Docker
+Dockerfile
+
+tsconfig.tsbuildinfo
+
+# prisma
+generated
+logfiles/*
+
+#static
+uplaods

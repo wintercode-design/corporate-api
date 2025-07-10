@@ -25,6 +25,7 @@ import RoleRouter from "./routes/role";
 import PermissionRouter from "./routes/permission";
 import AdminRouter from "./routes/admin";
 import QuoteRouter from "./routes/quote";
+import config from "./config/config";
 
 class App {
   public app: Application;
@@ -75,7 +76,7 @@ class App {
   }
 }
 
-const PORT = process.env.PORT ? parseInt(process.env.PORT) : 4000;
+const PORT = config.PORT ? parseInt(config.PORT) : 4000;
 const server = new App();
 server.app.get("/", (req, res) => {
   res.json({ status: "API running" });

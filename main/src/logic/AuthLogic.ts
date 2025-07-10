@@ -43,8 +43,8 @@ export default class AuthLogic {
     await this.mailer.sendWelcomeEmail({
       name: user.name,
       email: user.email,
-      appName: process.env.APP_NAME || "LOUMO",
-      loginUrl: process.env.BASE_URL || "",
+      appName: config.APP_NAME || "LOUMO",
+      loginUrl: config.FRONTEND_URL || "",
     });
     return user;
   }

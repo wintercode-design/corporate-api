@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import config from "../config/config";
 
 export class CustomError extends Error {
   statusCode?: number;
@@ -21,7 +22,7 @@ const errorHandler = (
   res.status(statusCode).json({
     success: false,
     message,
-    error: process.env.NODE_ENV === "production" ? undefined : err.stack,
+    error: config.NODE_ENV === "production" ? undefined : err.stack,
   });
 };
 
