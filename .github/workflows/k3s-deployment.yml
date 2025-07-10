@@ -36,7 +36,13 @@ jobs:
         working-directory: ./main
 
       - name: Log in to GIT HUB CONTAINER REGISTERY
-        run: echo "${{ secrets.DOCKER_PASSWORD  }}" | docker login -u ${{ env.DOCKER_USERNAME  }} --password-stdin
+        run: |
+          # echo "$(echo "${{ secrets.DOCKER_USERNAME  }}" | base64 -d)" | docker login -u "$(echo "${{ secrets.DOCKER_PASSWORD }}" | base64 -d)" --password-stdin
+
+          export USR=$(echo "${{ secrets.DOCKER_USERNAME  }}" | base64 -d)
+          export PWD=$(echo "${{ secrets.DOCKER_PASSWORD }}" | base64 -d)
+          
+          echo "$PWD" | docker login -u "$USR" --password-stdin
 
       - name: Build Docker image
         run: docker build -t $IMAGE_NAME:latest .
@@ -53,10 +59,11 @@ jobs:
       - name: Set up Kubeconfig
         run: |
           mkdir -p ~/.kube
-          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > ~/.kube/config
           chmod 600 ~/.kube/config
 
       - name: Redeploy app
         run: |
-          kubectl set image deployment/loumo-api loumo-api=jordanloumo/loumo-api:latest
+          # kubectl set image deployment/loumo-api loumo-api=jordanloumo/loumo-api:latest
+          kubectl apply -f ./k8s/
           kubectl rollout status deployment/loumo-api

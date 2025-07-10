@@ -23,10 +23,10 @@ WORKDIR /app
 # Copy built files
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/generated/prisma ./generated/prisma
+# COPY --from=builder /app/generated/prisma ./generated/prisma
 COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/build ./build
-COPY --from=builder /app/emailtemplates ./emailtemplates
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/templates ./templates
 
 # Copy runtime code if needed
 COPY --from=builder /app/src ./src

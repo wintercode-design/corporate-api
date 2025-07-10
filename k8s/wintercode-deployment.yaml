@@ -24,35 +24,53 @@ spec:
               value: "dev"
             - name: PORT
               value: "5000"
-            - name: BASE_URL
-              value: "http://localhost"
             - name: FRONTEND_URL
               value: "http://localhost:3000"
             - name: PAWAPAY_BASE_URL
-              value: "https://api.sandbox.pawapay.io"
+              valueFrom:
+                secretKeyRef:
+                    name: wintercode-secrets
+                    key: PAWAPAY_API_URL
             - name: PAWAPAY_API_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: wintercode-secrets
                   key: PAWAPAY_API_TOKEN
             - name: MAIN_DATABASE_URL
-              value: "mysql://root:Derliche@localhost:3306/wintercode"
+              valueFrom:
+                secretKeyRef:
+                  name: wintercode-secrets
+                  key: JWT_SECRET
             - name: LOG_DATABASE_URL
-              value: "mongodb://mongo_wintercode:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.5.2"
+              valueFrom:
+                secretKeyRef:
+                  name: wintercode-secrets
+                  key: JWT_SECRET
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: wintercode-secrets
                   key: JWT_SECRET
             - name: SMTP_USER
-              value: "info@le-carino.com"
+              valueFrom:
+                secretKeyRef:
+                  name: wintercode-secrets
+                  key: SMTP_USER
             - name: SMTP_PASS
               valueFrom:
                 secretKeyRef:
                   name: wintercode-secrets
                   key: SMTP_PASS
-            - name: MYSQLDB
-              value: "mysql://root:krest@mysql:3306/wintercode"
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: wintercode-secrets
+                  key: DB_HOST
+            - name: SMTP_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: wintercode-secrets
+                  key: SMTP_PORT
 ---
 apiVersion: v1
 kind: Service
