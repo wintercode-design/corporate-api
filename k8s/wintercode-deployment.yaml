@@ -30,7 +30,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                     name: wintercode-secrets
-                    key: PAWAPAY_API_URL
+                    key: PAWAPAY_BASE_URL
             - name: PAWAPAY_API_TOKEN
               valueFrom:
                 secretKeyRef:
@@ -40,12 +40,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: wintercode-secrets
-                  key: JWT_SECRET
+                  key: MAIN_DATABASE_URL
             - name: LOG_DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: wintercode-secrets
-                  key: JWT_SECRET
+                  key: LOG_DATABASE_URL
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
@@ -66,11 +66,11 @@ spec:
                 secretKeyRef:
                   name: wintercode-secrets
                   key: DB_HOST
-            - name: SMTP_PORT
+            - name: DB_PORT
               valueFrom:
                 secretKeyRef:
                   name: wintercode-secrets
-                  key: SMTP_PORT
+                  key: DB_PORT
 ---
 apiVersion: v1
 kind: Service
