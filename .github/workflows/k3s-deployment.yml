@@ -41,7 +41,7 @@ jobs:
 
           export USR=$(echo "${{ secrets.DOCKER_USERNAME  }}" | base64 -d)
           export PWD=$(echo "${{ secrets.DOCKER_PASSWORD }}" | base64 -d)
-          
+
           echo "$PWD" | docker login -u "$USR" --password-stdin
 
       - name: Build Docker image
@@ -64,6 +64,5 @@ jobs:
 
       - name: Redeploy app
         run: |
-          # kubectl set image deployment/loumo-api loumo-api=jordanloumo/loumo-api:latest
           kubectl apply -f ./k8s/
-          kubectl rollout status deployment/loumo-api
+          kubectl rollout status deployment/wintercode-api
