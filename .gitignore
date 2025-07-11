@@ -16,3 +16,6 @@ logfiles/*
 
 #static
 uplaods
+
+#secrets
+secrets.yaml
