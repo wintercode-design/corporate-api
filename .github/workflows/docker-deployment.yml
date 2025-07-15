@@ -57,8 +57,6 @@ jobs:
 
             echo ~/deployments/wintercode-api/current | DEPLOY_DIR=
             echo $DEPLOY_DIR
-            echo ~/deployments/wintercode-api/current
-
 
             if [ ! -d "$DEPLOY_DIR" ]; then
               mkdir -p $DEPLOY_DIR
