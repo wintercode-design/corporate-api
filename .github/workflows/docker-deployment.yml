@@ -53,9 +53,12 @@ jobs:
           ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} 'bash -s' << EOF
             set -euo pipefail
 
-            DEPLOY_DIR=~/deployments/wintercode-api/current
+            DEPLOY_DIR = ~/deployments/wintercode-api/current
+
+            echo ~/deployments/wintercode-api/current | DEPLOY_DIR=
             echo $DEPLOY_DIR
-            pwd
+            echo ~/deployments/wintercode-api/current
+
 
             if [ ! -d "$DEPLOY_DIR" ]; then
               mkdir -p $DEPLOY_DIR
