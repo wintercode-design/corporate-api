@@ -5,62 +5,32 @@ services:
       context: ./main
       dockerfile: Dockerfile
     restart: unless-stopped
-    environment:
-      NODE_ENV: ${NODE_ENV}
-      PORT: ${PORT}
-      FRONTEND_URL: ${FRONTEND_URL}
-      PAWAPAY_BASE_URL: ${PAWAPAY_BASE_URL}
-      PAWAPAY_API_TOKEN: ${PAWAPAY_API_TOKEN}
-      MAIN_DATABASE_URL: ${MAIN_DATABASE_URL}
-      LOG_DATABASE_URL: ${LOG_DATABASE_URL}
-      JWT_SECRET: ${JWT_SECRET}
-      SMTP_USER: ${SMTP_USER}
-      SMTP_PASS: ${SMTP_PASS}
-      DB_HOST: ${DB_HOST}
+    env_file:
+      - ./shared/.env.prod
     volumes:
-      - /root/backup/wintercode/home:/app/uploads
+      - /home/wintercode/backup/wintercode:/app/uploads
     ports:
       - "4000:4000"
     networks:
-      - app-network
+      - frostNet
     depends_on:
-      - mysql_wintercode
+      - mongo-wintercode
 
-  mongo_wintercode:
-    container_name: mongo_wintercode
+  mongo-wintercode:
+    container_name: mongo-wintercode
     image: mongo:6
     restart: unless-stopped
     environment:
       MONGO_INITDB_DATABASE: wintercode-db
     volumes:
-      - mongo-data:/data/db
-      # - /root/backup/wintercode/mongo-data:/data/db
+      - /home/wintercode/backup/wintercode:/data/db
     ports:
       - "27017:27017"
     networks:
-      - app-network
-
-  mysql_wintercode:
-    container_name: mysql_wintercode
-    image: mysql:8
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: krest
-      MYSQL_DATABASE: wintercode
-      MYSQL_PASSWORD: krest
-    ports:
-      - "3317:3306"
-    volumes:
-      - mysql-data:/var/lib/mysql
-      # - /root/backup/wintercode/mysql-data:/var/lib/mysql
-    networks:
-      - app-network
+      - frostNet
 
 networks:
-  app-network:
+  frostNet:
     driver: bridge
     attachable: true
-volumes:
-  mongo-data: {}
-  mysql-data: {}
 # correct deployment

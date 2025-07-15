@@ -78,7 +78,7 @@ class App {
 
 const PORT = config.PORT ? parseInt(config.PORT) : 4000;
 const server = new App();
-server.app.get("/", (req, res) => {
+server.app.get("/health", (req, res) => {
   res.json({ status: "API running" });
 });
 server.app.use(errorHandler);
