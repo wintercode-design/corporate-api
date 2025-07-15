@@ -54,6 +54,7 @@ jobs:
             set -euo pipefail
 
             DEPLOY_DIR=~/deployments/wintercode-api/current
+            echo $DEPLOY_DIR
 
             if [ ! -d "$DEPLOY_DIR" ]; then
               mkdir -p $DEPLOY_DIR
