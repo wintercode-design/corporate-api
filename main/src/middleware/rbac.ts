@@ -173,6 +173,7 @@ const publicRoutes = [
   "/api/reviews",
   "/api/team-members",
   "/api/ads",
+  "/health",
 ];
 
 // Auth routes that don't require authentication (all methods)
