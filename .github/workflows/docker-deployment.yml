@@ -1,4 +1,4 @@
-name: Deploy Loumo API
+name: Deploy Wintercode API
 
 on:
   push:
@@ -73,17 +73,11 @@ jobs:
             cp ~/deployments/wintercode-api/shared/.env.prod .env.prod
             export DOCKER_BUILDKIT=0
 
-            # Tag the current image as previous (if exists)
-            if docker images | grep loumo; then
-              docker tag loumo:latest loumo:previous || true
-            fi
-
             # Remove any containers that might conflict
-            docker rm -f mongo_loumo loumo 2>/dev/null || true
+            docker rm -f mongo_wintercode wintercode 2>/dev/null || true
 
             # Build and run the new image
-            COMPOSE_PROJECT_NAME=default docker compose -f docker-compose.yml --env-file .env.prod build
-            COMPOSE_PROJECT_NAME=default docker compose -f docker-compose.yml --env-file .env.prod up -d
+            docker compose up -d --build
 
             # Health check loop
             for i in {1..10}; do
@@ -94,29 +88,6 @@ jobs:
               echo "⏳ Waiting for app to be ready... ($i/10)"
               sleep 6
             done
-
-            if curl --fail http://localhost:4000/health; then
-              # Tag the running image as current
-              docker tag loumo:latest loumo:current
-              echo "✅ Deployment successful and image tagged as current"
-            else
-              echo "❌ Health check failed, rolling back"
-              # Stop the failed container
-              docker rm -f loumo 2>/dev/null || true
-              # Remove the failed image
-              docker rmi loumo:latest || true
-              # Re-run the previous image if it exists
-              if docker images | grep loumo | grep previous; then
-                docker tag loumo:previous loumo:latest
-                COMPOSE_PROJECT_NAME=default docker compose -f docker-compose.yml --env-file .env.prod up -d
-                # Tag the rolled-back image as current
-                docker tag loumo:latest loumo:current
-                echo "🔄 Rolled back to previous image and tagged as current"
-              else
-                echo "⚠️ No previous image to roll back to"
-              fi
-              exit 1
-            fi
 
             echo "🎯 Deployment complete"
             exit 0
