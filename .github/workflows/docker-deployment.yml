@@ -60,7 +60,7 @@ jobs:
 
             DEPLOY_DIR=~/deployments/wintercode-api/current
 
-            if [ ! -d '$DEPLOY_DIR' ]; then
+            if [ ! -d $DEPLOY_DIR ]; then
               mkdir -p $DEPLOY_DIR
               git clone https://github.com/${{ github.repository }} $DEPLOY_DIR
             else
