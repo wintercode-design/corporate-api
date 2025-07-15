@@ -75,6 +75,7 @@ jobs:
 
             # Remove any containers that might conflict
             docker rm -f mongo_wintercode wintercode 2>/dev/null || true
+            docker rmi current-wintercode:latest 2>/dev/null || true
 
             # Build and run the new image
             docker compose up -d --build
