@@ -8,7 +8,7 @@ export default class Mailer {
   constructor() {
     this.transporter = nodemailer.createTransport({
       service: "smtp", // or use host, port, and secure for custom SMTP
-      host: "smtp.titan.email",
+      host: "smtp.hostinger.com",
       port: 465,
       secure: true,
       auth: {
@@ -74,5 +74,26 @@ export default class Mailer {
     });
 
     console.log(`✅ Password reset email sent to ${email}`);
+  };
+
+  sendNewsletterWelcomeEmail = async ({
+    name,
+    email,
+  }: {
+    name: string | null;
+    email: string;
+  }) => {
+    const year = new Date().getFullYear();
+    const html = await ejs.renderFile(
+      path.join(__dirname, "../../templates/newsletterWelcome.ejs"),
+      { name, year }
+    );
+    await this.transporter.sendMail({
+      from: config.EMAIL.SMTP_USER,
+      to: email,
+      subject: `Welcome to the Wintercode Newsletter!`,
+      html,
+    });
+    console.log(`✅ Newsletter welcome email sent to ${email}`);
   };
 }

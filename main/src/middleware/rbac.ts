@@ -174,6 +174,7 @@ const publicRoutes = [
   "/api/team-members",
   "/api/ads",
   "/health",
+  "/api/subscribers",
 ];
 
 // Auth routes that don't require authentication (all methods)
@@ -193,13 +194,22 @@ const isPublicRoute = (req: Request): boolean => {
     route => req.path.startsWith(route) && req.method === "GET"
   );
 
+  // Allow subscription to newsletter (POST requests to /api/subscribers)
+  const isNewsletterSubscription =
+    req.path === "/api/subscribers" && req.method === "POST";
+
   // Allow public access to specific resources by ID (GET requests only)
   const isPublicResource =
     req.path.match(
       /^\/(api\/products|api\/blogs|api\/events|api\/offers|api\/projects|api\/reviews|api\/team-members|api\/ads)\/\d+$/
     ) && req.method === "GET";
 
-  return isAuthRoute || isPublicPath || !!isPublicResource;
+  return (
+    isAuthRoute ||
+    isPublicPath ||
+    isNewsletterSubscription ||
+    !!isPublicResource
+  );
 };
 
 // Main RBAC middleware

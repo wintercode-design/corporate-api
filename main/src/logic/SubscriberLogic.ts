@@ -3,6 +3,16 @@ const prisma = new PrismaClient();
 
 export class SubscriberLogic {
   async createSubscriber(data: Omit<Subscriber, "id">): Promise<Subscriber> {
+    // Check if subscriber already exists with the same email
+    const existingSubscriber = await prisma.subscriber.findUnique({
+      where: { email: data.email },
+    });
+
+    if (existingSubscriber) {
+      return existingSubscriber;
+    }
+
+    // Create new subscriber if email doesn't exist
     return prisma.subscriber.create({ data });
   }
 

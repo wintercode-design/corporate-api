@@ -3,8 +3,10 @@ import Joi from "joi";
 import { CustomError } from "../middleware/errorHandler";
 import { Subscriber } from "@prisma/client";
 import { SubscriberLogic } from "../logic/SubscriberLogic";
+import Mailer from "../services/email";
 
 const subscriberLogic = new SubscriberLogic();
+const mailer = new Mailer();
 
 const createSubscriberSchema = Joi.object({
   email: Joi.string().required(),
@@ -70,6 +72,11 @@ class SubscriberController {
       const newSubscriber = await subscriberLogic.createSubscriber(
         request.body
       );
+      // Send newsletter welcome email
+      await mailer.sendNewsletterWelcomeEmail({
+        name: newSubscriber.name || null,
+        email: newSubscriber.email,
+      });
       response.status(201).json(newSubscriber);
     } catch (err) {
       throw new CustomError(

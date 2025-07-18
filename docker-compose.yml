@@ -31,6 +31,9 @@ services:
 
 networks:
   frostNet:
-    driver: bridge
-    attachable: true
+    external: true
+# networks:
+#   frostNet:
+#     driver: bridge
+#     attachable: true
 # correct deployment
